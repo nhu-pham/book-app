@@ -9,6 +9,7 @@ public class Book {
     private String cover_url;
     private String file_url;
     private float avg_rating;
+    private String category_name;
 
     // Getters
     public String getBook_id() { return book_id; }
@@ -19,4 +20,6 @@ public class Book {
     public String getCover_url() { return cover_url; }
     public String getFile_url() { return file_url; }
     public float getAvg_rating() { return avg_rating; }
+    public String getCategoryName() { return category_name; }
+    public void setCategoryName(String categoryName) { this.category_name = categoryName; }
 }

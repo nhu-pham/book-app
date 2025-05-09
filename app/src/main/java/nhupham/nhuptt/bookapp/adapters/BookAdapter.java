@@ -38,12 +38,13 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
         Book book = bookList.get(position);
         holder.titleTv.setText(book.getTitle());
-        holder.categoryTv.setText(book.getAuthor());
+        holder.categoryTv.setText(book.getCategoryName());
 
         // Load ảnh
         Picasso.get()
                 .load(book.getCover_url())
-                .placeholder(com.denzcoskun.imageslider.R.drawable.placeholder)
+                .placeholder(R.drawable.loading) // Hình ảnh placeholder khi ảnh chưa được tải
+                .error(R.drawable.error) // Hình ảnh khi xảy ra lỗi
                 .into(holder.coverIv);
     }
 

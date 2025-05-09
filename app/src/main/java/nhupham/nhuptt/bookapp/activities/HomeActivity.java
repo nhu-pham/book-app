@@ -99,10 +99,10 @@ public class HomeActivity extends AppCompatActivity {
             return false;
         });
 
-        TextView viewAllCategory = findViewById(R.id.viewAllCategory);
-        viewAllCategory.setOnClickListener(v -> {
-            startActivity(new Intent(this, CategoryListActivity.class));
-        });
+//        TextView viewAllCategory = findViewById(R.id.viewAllCategory);
+//        viewAllCategory.setOnClickListener(v -> {
+//            startActivity(new Intent(this, CategoryListActivity.class));
+//        });
 
 
     }

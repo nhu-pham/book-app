@@ -44,8 +44,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         if (imageUrl != null && !imageUrl.isEmpty()) {
             Picasso.get()
                     .load(imageUrl)
-                    .placeholder(R.drawable.book2) // Hình ảnh placeholder khi ảnh chưa được tải
-                    .error(com.denzcoskun.imageslider.R.drawable.error) // Hình ảnh khi xảy ra lỗi
+                    .placeholder(R.drawable.loading) // Hình ảnh placeholder khi ảnh chưa được tải
+                    .error(R.drawable.error) // Hình ảnh khi xảy ra lỗi
                     .into(holder.categoryImageIv);
         } else {
             holder.categoryImageIv.setImageResource(R.drawable.book1); // Hình ảnh mặc định khi không có URL
