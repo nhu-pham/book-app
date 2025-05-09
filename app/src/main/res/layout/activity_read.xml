@@ -39,7 +39,8 @@
                 android:layout_marginStart="12dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Search"
+                android:text="Đại Việt Sử Ký"
+                android:textStyle="bold"
                 android:textColor="@android:color/black"
                 android:textSize="20sp" />
 
@@ -53,18 +54,7 @@
             android:layout_marginTop="8dp"
             android:background="@android:color/darker_gray" />
 
-        <!-- Ô tìm kiếm -->
-        <EditText
-            android:id="@+id/searchEt"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="8dp"
-            android:background="@android:drawable/editbox_background"
-            android:drawableEnd="@drawable/ic_search_gray"
-            android:hint="Search books..."
-            android:paddingStart="12dp"
-            android:textColor="@android:color/black" />
+
 
         <!-- RecyclerView giữ nguyên... -->
         <!-- Bạn có thể thêm RecyclerView tại đây nếu cần -->
@@ -76,48 +66,14 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <!-- Hình bìa sách + icon trái tim -->
-            <FrameLayout
-                android:layout_width="137dp"
-                android:layout_height="150dp">
-
-                <ImageView
-                    android:id="@+id/bookImageIv"
-                    android:layout_width="136dp"
-                    android:layout_height="match_parent"
-                    android:contentDescription="Book cover"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/book3" />
-
-                <ImageView
-                    android:id="@+id/favoriteIcon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="bottom|end"
-                    android:layout_margin="8dp"
-                    android:contentDescription="Favorite icon"
-                    android:src="@drawable/ic_favorite" />
-            </FrameLayout>
-
-            <!-- Thể loại sách -->
-            <TextView
-                android:id="@+id/categoryTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Fantasy"
-                android:textColor="#008000"
-                android:textSize="14sp" />
-
             <!-- Tên sách -->
             <TextView
                 android:id="@+id/bookTitleTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="The book 1"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:text="Đại Việt sử ký toàn thư (chữ Hán: 大越史記全書), đôi khi gọi tắt là Toàn thư [cần dẫn nguồn], là bộ quốc sử viết bằng văn ngôn của Việt Nam, viết theo thể biên niên, ghi chép lịch sử Việt Nam từ thời đại truyền thuyết Kinh Dương Vương năm 2879 TCN đến năm 1675 đời vua Lê Gia Tông nhà Hậu Lê. Bộ sử này được khắc in toàn bộ và phát hành lần đầu tiên vào năm Đinh Sửu, niên hiệu Chính Hoà năm thứ 18, triều vua Lê Hy Tông, tức là năm 1697. Nó là bộ chính sử Việt Nam xưa nhất còn tồn tại nguyên vẹn đến ngày nay, do nhiều đời sử quan trong Sử quán triều Hậu Lê biên soạn.  "
+                android:textSize="14sp" />
         </LinearLayout>
 
 

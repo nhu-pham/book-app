@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="30dp"
+    android:height="30dp"
+    android:viewportWidth="30"
+    android:viewportHeight="30">
+
+    <!-- Background: Hình vuông bo góc màu xám -->
+    <path
+        android:fillColor="#CCCCCC"
+        android:pathData="M4,4 h22 a2,2 0 0 1 2,2 v18 a2,2 0 0 1 -2,2 h-22 a2,2 0 0 1 -2,-2 v-18 a2,2 0 0 1 2,-2 z" />
+
+    <!-- Dấu cộng màu trắng -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M15,9 v12 m-6,-6 h12"
+        android:strokeWidth="2"
+        android:strokeColor="#FFFFFF" />
+</vector>
