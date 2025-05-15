@@ -36,8 +36,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private RecyclerView categoryRecyclerView;
     private CategoryAdapter categoryAdapter;
-    private RecyclerView newBooksRecyclerView, popularBooksRecyclerView;
-    private BookAdapter newBookAdapter, popularBookAdapter;
+    private RecyclerView newBooksRecyclerView, popularBooksRecyclerView, booksByCategoryRecyclerView;
+    private BookAdapter newBookAdapter, popularBookAdapter, bookAdapterByCategory;
     private ApiService apiService;
 
     @Override
@@ -99,11 +99,27 @@ public class HomeActivity extends AppCompatActivity {
             return false;
         });
 
-//        TextView viewAllCategory = findViewById(R.id.viewAllCategory);
-//        viewAllCategory.setOnClickListener(v -> {
-//            startActivity(new Intent(this, CategoryListActivity.class));
-//        });
+        TextView viewAllCategory = findViewById(R.id.viewAllCategory);
+        TextView viewAllNew = findViewById(R.id.viewAllNew);
+        TextView viewAllPopular = findViewById(R.id.viewAllPopular);
 
+        viewAllCategory.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+            intent.putExtra("viewType", "category");
+            startActivity(intent);
+        });
+
+        viewAllNew.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+            intent.putExtra("viewType", "new");
+            startActivity(intent);
+        });
+
+        viewAllPopular.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+            intent.putExtra("viewType", "popular");
+            startActivity(intent);
+        });
 
     }
 
@@ -113,7 +129,14 @@ public class HomeActivity extends AppCompatActivity {
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Category> categoryList = response.body();
-                    categoryAdapter = new CategoryAdapter(HomeActivity.this, categoryList);
+                    categoryAdapter = new CategoryAdapter(HomeActivity.this, categoryList, category -> {
+                        // Chuyển categoryId sang SearchActivity
+                        Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+                        intent.putExtra("categoryId", category.getCategoryId()); // Truyền categoryId
+                        startActivity(intent);
+                    });
+                    categoryRecyclerView.setAdapter(categoryAdapter);
+
                     categoryRecyclerView.setAdapter(categoryAdapter);
                 } else {
                     Toast.makeText(HomeActivity.this, "Không tải được danh mục", Toast.LENGTH_SHORT).show();
@@ -160,5 +183,4 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
-
 }

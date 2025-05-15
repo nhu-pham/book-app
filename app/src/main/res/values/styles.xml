@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="RatingBar.Yellow" parent="Theme.MaterialComponents.Light">
+        <item name="colorControlActivated">#FFD700</item> <!-- Vàng (Gold) -->
+    </style>
+</resources>
