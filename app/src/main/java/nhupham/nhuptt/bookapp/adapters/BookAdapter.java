@@ -1,5 +1,6 @@
 package nhupham.nhuptt.bookapp.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -57,7 +58,9 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
             intent.putExtra("type", book.getCategoryName());
             intent.putExtra("description", book.getDescription());
             intent.putExtra("coverUrl", book.getCover_url());
+            intent.putExtra("fileUrl", book.getFile_url());
             intent.putExtra("rating", book.getAvg_rating());
+            intent.putExtra("position", holder.getAdapterPosition());
             context.startActivity(intent);
         });
 

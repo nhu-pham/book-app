@@ -39,6 +39,9 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView newBooksRecyclerView, popularBooksRecyclerView, booksByCategoryRecyclerView;
     private BookAdapter newBookAdapter, popularBookAdapter, bookAdapterByCategory;
     private ApiService apiService;
+    private List<Book> newBookList = new ArrayList<>();
+    private List<Book> popularBookList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +160,7 @@ public class HomeActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     newBookAdapter = new BookAdapter(HomeActivity.this, response.body());
                     newBooksRecyclerView.setAdapter(newBookAdapter);
+
                 }
             }
 
@@ -174,6 +178,7 @@ public class HomeActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     popularBookAdapter = new BookAdapter(HomeActivity.this, response.body());
                     popularBooksRecyclerView.setAdapter(popularBookAdapter);
+
                 }
             }
 

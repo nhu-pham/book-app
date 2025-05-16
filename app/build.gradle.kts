@@ -44,9 +44,10 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation(libs.retrofit)
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation(libs.imageslideshow)
     implementation (libs.picasso)
-    implementation (libs.android.pdf.viewer)
+    implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.3")
+    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
 
 }

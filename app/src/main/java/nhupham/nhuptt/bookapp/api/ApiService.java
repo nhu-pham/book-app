@@ -5,8 +5,10 @@ import java.util.List;
 import nhupham.nhuptt.bookapp.models.Book;
 import nhupham.nhuptt.bookapp.models.Category;
 import nhupham.nhuptt.bookapp.models.Comment;
+import nhupham.nhuptt.bookapp.responses.CommentResponse;
 import nhupham.nhuptt.bookapp.responses.LoginResponse;
 import nhupham.nhuptt.bookapp.responses.RegisterResponse;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -53,16 +55,14 @@ public interface ApiService {
     @GET("get_comments.php")
     Call<List<Comment>> getComments(@Query("book_id") int bookId);
 
-    @POST("add_comment.php")
     @FormUrlEncoded
-    Call<Void> addComment(
-            @Field("user_id") String name,
+    @POST("add_comment.php")
+    Call<CommentResponse> addComment(
+            @Field("book_id") int bookId,
+            @Field("user_id") int userId,
             @Field("comment") String comment,
-            @Field("rating") float rating,
-            @Field("book_id") int bookId
+            @Field("rating") float rating
     );
-
-
 
 }
 

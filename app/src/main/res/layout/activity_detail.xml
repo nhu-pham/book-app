@@ -228,6 +228,17 @@
                             app:srcCompat="@drawable/ic_plus_gray" />
                     </LinearLayout>
 
+                    <TextView
+                        android:id="@+id/no_comments_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Chưa có đánh giá"
+                        android:textColor="#666666"
+                        android:textSize="14sp"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:padding="16dp"/>
+
                     <!-- RecyclerView để hiển thị danh sách bình luận -->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/comments_recycler_view"

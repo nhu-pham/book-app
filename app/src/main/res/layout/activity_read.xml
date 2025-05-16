@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".activities.SearchActivity">
+    android:fitsSystemWindows="true">
 
-    <!-- Bottom Navigation giữ nguyên -->
+    <!-- Nội dung chính -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Header: Icon trở về và tiêu đề "Search" -->
+        <!-- Header: Icon trở về và tiêu đề -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,7 +21,6 @@
             android:paddingHorizontal="16dp"
             android:paddingTop="16dp">
 
-            <!-- Icon trở về -->
             <ImageView
                 android:id="@+id/backIv"
                 android:layout_width="24dp"
@@ -31,7 +28,6 @@
                 android:contentDescription="Back"
                 android:src="@drawable/ic_back_dark" />
 
-            <!-- Tiêu đề "Search" -->
             <TextView
                 android:id="@+id/titleTv"
                 android:layout_width="0dp"
@@ -39,11 +35,10 @@
                 android:layout_marginStart="12dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Đại Việt Sử Ký"
+                android:text="Tên sách"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
                 android:textSize="20sp" />
-
         </LinearLayout>
 
         <!-- Đường kẻ ngăn cách -->
@@ -54,39 +49,41 @@
             android:layout_marginTop="8dp"
             android:background="@android:color/darker_gray" />
 
-
-
-        <!-- RecyclerView giữ nguyên... -->
-        <!-- Bạn có thể thêm RecyclerView tại đây nếu cần -->
-        <!-- res/layout/book_item.xml -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <!-- Tên sách -->
-<!--            <com.github.barteksc.pdfviewer.PDFView-->
-<!--                android:id="@+id/pdfView"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:layout_weight="1"-->
-<!--                android:layout_margin="8dp" />-->
-
-        </LinearLayout>
-
-
+        <!-- PDFView -->
+        <com.github.barteksc.pdfviewer.PDFView
+            android:id="@+id/pdfView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_margin="8dp"/>
     </LinearLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+    <!-- ProgressBar và thông điệp tải -->
+    <LinearLayout
+        android:id="@+id/loadingLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/white"
-        app:menu="@menu/bottom_nav_menu"
-        app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/gray01"
-        app:itemTextColor="@color/gray01" />
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="#80000000" >
+
+        <ProgressBar
+            android:id="@+id/progressBbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/gray01"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/loadingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đang tải PDF..."
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
+</RelativeLayout>
