@@ -8,6 +8,10 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,11 +27,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FavoriteActivity extends BaseActivity {
+public class HistoryActivity extends BaseActivity {
 
-    private RecyclerView favoriteBooksRv;
-    private BookAdapter favoriteAdapter;
-    private List<Book> favoriteBookList = new ArrayList<>();
+    private RecyclerView historyBooksRv;
+    private BookAdapter historyAdapter;
+    private List<Book> historyBookList = new ArrayList<>();
     private ApiService apiService;
     private int userId;
 
@@ -36,24 +40,24 @@ public class FavoriteActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favorite);
+        setContentView(R.layout.activity_history);
         setupBottomNavigation();
 
         // Lấy user_id từ SharedPreferences
         SharedPreferences sp = getSharedPreferences("user_session", MODE_PRIVATE);
         userId = sp.getInt("user_id", -1);
 
-        favoriteBooksRv = findViewById(R.id.favoriteBooksRv);
-        favoriteBooksRv.setLayoutManager(new GridLayoutManager(this, 2));
-        favoriteAdapter = new BookAdapter(this, favoriteBookList, true);
-        favoriteBooksRv.setAdapter(favoriteAdapter);
+        historyBooksRv = findViewById(R.id.historyBooksRv);
+        historyBooksRv.setLayoutManager(new GridLayoutManager(this, 2));
+        historyAdapter = new BookAdapter(this, historyBookList, true);
+        historyBooksRv.setAdapter(historyAdapter);
         searchEt = findViewById(R.id.searchEt);
 
         // Khởi tạo Retrofit
         apiService = ApiClient.getClient().create(ApiService.class);
 
-        // Tải danh sách sách yêu thích
-        loadFavoriteBooks();
+        // Tải danh sách sách đã đọc
+        loadHistoryBooks();
 
         // Search
         String keyword = getIntent().getStringExtra("keyword");
@@ -79,65 +83,65 @@ public class FavoriteActivity extends BaseActivity {
                 if (!newKeyword.isEmpty()) {
                     searchBooks(newKeyword);
                 } else {
-                    if (favoriteAdapter != null) {
-                        favoriteAdapter.updateData(favoriteBookList);
+                    if (historyAdapter != null) {
+                        historyAdapter.updateData(historyBookList);
                     }
                 }
             }
         });
     }
 
-    private void loadFavoriteBooks() {
+    private void loadHistoryBooks() {
         if (userId == -1) {
             Toast.makeText(this, "Bạn chưa đăng nhập", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        apiService.getFavoriteBooks(userId).enqueue(new Callback<List<Book>>() {
+        apiService.getReadBooks(userId).enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    favoriteBookList.clear();
-                    favoriteBookList.addAll(response.body());
-                    favoriteAdapter.updateData(favoriteBookList);
+                    historyBookList.clear();
+                    historyBookList.addAll(response.body());
+                    historyAdapter.updateData(historyBookList);
                 } else {
-                    Toast.makeText(FavoriteActivity.this, "Không lấy được danh sách yêu thích", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HistoryActivity.this, "Không lấy được danh sách đã đọc", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Book>> call, Throwable t) {
                 Log.e("FavoriteActivity", "Lỗi API: " + t.getMessage());
-                Toast.makeText(FavoriteActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HistoryActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     @Override
     protected int getCurrentNavItemId() {
-        return R.id.nav_favorite;
+        return R.id.nav_history;
     }
 
     private void searchBooks(String keyword) {
-        apiService.searchFavoriteBooks(keyword, userId).enqueue(new Callback<List<Book>>() {
+        apiService.searchReadBooks(keyword, userId).enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Book> bookList = response.body();
-                    if (favoriteAdapter == null) {
-                        favoriteAdapter = new BookAdapter(FavoriteActivity.this, bookList, false);
-                        favoriteBooksRv.setAdapter(favoriteAdapter);
+                    if (historyAdapter == null) {
+                        historyAdapter = new BookAdapter(HistoryActivity.this, bookList, false);
+                        historyBooksRv.setAdapter(historyAdapter);
                     } else {
-                        favoriteAdapter.updateData(bookList);
+                        historyAdapter.updateData(bookList);
                     }
                 } else {
-                    Toast.makeText(FavoriteActivity.this, "Không tìm thấy kết quả", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HistoryActivity.this, "Không tìm thấy kết quả", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Book>> call, Throwable t) {
-                Toast.makeText(FavoriteActivity.this, "Lỗi tìm kiếm", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HistoryActivity.this, "Lỗi tìm kiếm", Toast.LENGTH_SHORT).show();
             }
         });
     }

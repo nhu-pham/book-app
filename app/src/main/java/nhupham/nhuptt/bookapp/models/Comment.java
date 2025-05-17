@@ -27,4 +27,5 @@ public class Comment {
     public String getAvatar_url() {
         return avatar_url;
     }
+
 }

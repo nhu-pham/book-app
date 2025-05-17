@@ -5,6 +5,8 @@ public class CommentResponse {
     private String comment;
     private int rating;
     private int book_id;
+    private float avg_rating;
+    private boolean success;
 
     public int getUser_id() {
         return user_id;
@@ -36,6 +38,11 @@ public class CommentResponse {
 
     public void setBook_id(int book_id) {
         this.book_id = book_id;
+    }
+
+    public float getAvg_rating() { return avg_rating; }
+    public boolean isSuccess() {
+        return success;
     }
 }
 

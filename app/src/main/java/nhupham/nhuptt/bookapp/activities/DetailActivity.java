@@ -3,6 +3,7 @@ package nhupham.nhuptt.bookapp.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -34,7 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends BaseActivity {
 
     private ImageView bookCover, favoriteIcon, addCommentIcon;
     private TextView bookTitle, bookAuthor, bookType, bookDescription, noCommentsText;
@@ -46,22 +47,23 @@ public class DetailActivity extends AppCompatActivity {
     private CommentAdapter commentAdapter;
     private List<Comment> commentList = new ArrayList<>();
     private ApiService apiService;
+    private ImageView isFavoriteIv;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        setupBottomNavigation();
+
+        apiService = ApiClient.getClient().create(ApiService.class);
 
         userId = getUserId();
-        bookId = Integer.valueOf(getIntent().getStringExtra("bookId"));
-
+        bookId = getIntent().getIntExtra("bookId", 0);
 
         recyclerView = findViewById(R.id.comments_recycler_view);
         addCommentIcon = findViewById(R.id.add_comment_icon);
 
-        // Khởi tạo Retrofit
-        apiService = ApiClient.getClient().create(ApiService.class);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentAdapter = new CommentAdapter(commentList);
@@ -75,11 +77,11 @@ public class DetailActivity extends AppCompatActivity {
         readNowButton = findViewById(R.id.read_now_button);
         bookRating = findViewById(R.id.book_rating);
         noCommentsText = findViewById(R.id.no_comments_text);
+        isFavoriteIv = findViewById(R.id.favoriteIcon);
 
 
         // Nhận dữ liệu từ Intent
         Intent intent = getIntent();
-        Integer bookId = Integer.valueOf(intent.getStringExtra("bookId"));
         String title = intent.getStringExtra("title");
         String author = intent.getStringExtra("author");
         String type = intent.getStringExtra("type");
@@ -87,6 +89,13 @@ public class DetailActivity extends AppCompatActivity {
         String imageUrl = intent.getStringExtra("coverUrl");
         String fileUrl = intent.getStringExtra("fileUrl");
         float rating = intent.getFloatExtra("rating", 0f);
+        boolean isFavorite = intent.getBooleanExtra("isFavorite", false);
+
+        if (isFavorite) {
+            isFavoriteIv.setImageResource(R.drawable.ic_favorite_red);
+        } else {
+            isFavoriteIv.setImageResource(R.drawable.ic_favorite_border);
+        }
 
         // Gán dữ liệu vào view
         bookTitle.setText(title);
@@ -112,13 +121,19 @@ public class DetailActivity extends AppCompatActivity {
             Intent intentRead = new Intent(DetailActivity.this, ReadActivity.class);
             intentRead.putExtra("title", title);
             intentRead.putExtra("fileUrl", fileUrl);
+            intentRead.putExtra("bookId", bookId);
+            intentRead.putExtra("userId", userId);
             startActivity(intentRead);
         });
 
         addCommentIcon.setOnClickListener(v -> {
             showAddCommentDialog();
         });
+    }
 
+    @Override
+    protected int getCurrentNavItemId() {
+        return R.id.nav_home;
     }
 
     private void getComments(Integer bookId) {
@@ -199,15 +214,11 @@ public class DetailActivity extends AppCompatActivity {
         apiService.addComment(bookId, userId, comment, rating).enqueue(new Callback<CommentResponse>() {
             @Override
             public void onResponse(Call<CommentResponse> call, Response<CommentResponse> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body().isSuccess()) {
+                    float newAvgRating = response.body().getAvg_rating();
+                    bookRating.setRating(newAvgRating);
                     Toast.makeText(DetailActivity.this, "Thêm đánh giá thành công!", Toast.LENGTH_SHORT).show();
                     getComments(bookId);
-                    Intent resultIntent = new Intent();
-                    resultIntent.putExtra("bookId", bookId);
-                    resultIntent.putExtra("newRating", rating);  // Đây là rating mới người dùng chọn
-                    resultIntent.putExtra("position", getIntent().getIntExtra("position", -1)); // 👈 Lấy lại vị trí
-                    setResult(RESULT_OK, resultIntent);
-
                 } else {
                     Toast.makeText(DetailActivity.this, "Lỗi khi thêm đánh giá!", Toast.LENGTH_SHORT).show();
                 }

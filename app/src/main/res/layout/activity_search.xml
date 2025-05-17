@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
+    android:fitsSystemWindows="true"
     tools:context=".activities.SearchActivity">
 
     <!-- Bottom Navigation giữ nguyên -->
@@ -66,8 +67,6 @@
             android:paddingStart="12dp"
             android:textColor="@android:color/black" />
 
-        <!-- RecyclerView giữ nguyên... -->
-        <!-- Bạn có thể thêm RecyclerView tại đây nếu cần -->
         <!-- res/layout/book_item.xml -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/booksRv"

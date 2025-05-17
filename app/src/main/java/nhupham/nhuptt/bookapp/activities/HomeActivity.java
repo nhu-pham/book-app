@@ -1,7 +1,11 @@
 package nhupham.nhuptt.bookapp.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,15 +36,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends BaseActivity {
 
     private RecyclerView categoryRecyclerView;
     private CategoryAdapter categoryAdapter;
-    private RecyclerView newBooksRecyclerView, popularBooksRecyclerView, booksByCategoryRecyclerView;
-    private BookAdapter newBookAdapter, popularBookAdapter, bookAdapterByCategory;
+    private RecyclerView newBooksRecyclerView, popularBooksRecyclerView;
+    private BookAdapter newBookAdapter, popularBookAdapter;
+    List<Book> searchResults = new ArrayList<>();
     private ApiService apiService;
     private List<Book> newBookList = new ArrayList<>();
     private List<Book> popularBookList = new ArrayList<>();
+    private int userId;
 
 
     @Override
@@ -48,6 +54,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home);
+        setupBottomNavigation();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -76,54 +83,66 @@ public class HomeActivity extends AppCompatActivity {
         popularBooksRecyclerView = findViewById(R.id.popularBooksRecyclerView);
         popularBooksRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
+        // userId
+        SharedPreferences sp = getSharedPreferences("user_session", MODE_PRIVATE);
+        userId = sp.getInt("user_id", -1);
+
         // Gọi API load dữ liêu
         loadCategories();
         loadNewBooks();
         loadPopularBooks();
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-
-            if (itemId == R.id.nav_home) {
-                // Đã ở Home, không cần chuyển
-                return true;
-            } else if (itemId == R.id.nav_search) {
-                startActivity(new Intent(HomeActivity.this, SearchActivity.class));
-                return true;
-            } else if (itemId == R.id.nav_library) {
-                startActivity(new Intent(HomeActivity.this, LibraryActivity.class));
-                return true;
-            } else if (itemId == R.id.nav_profile) {
-                startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
-                return true;
-            }
-
-            return false;
-        });
-
         TextView viewAllCategory = findViewById(R.id.viewAllCategory);
         TextView viewAllNew = findViewById(R.id.viewAllNew);
         TextView viewAllPopular = findViewById(R.id.viewAllPopular);
 
+
         viewAllCategory.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
             intent.putExtra("viewType", "category");
+            intent.putExtra("userId", userId);
             startActivity(intent);
         });
 
         viewAllNew.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
             intent.putExtra("viewType", "new");
+            intent.putExtra("userId", userId);
             startActivity(intent);
         });
 
         viewAllPopular.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
             intent.putExtra("viewType", "popular");
+            intent.putExtra("userId", userId);
             startActivity(intent);
         });
 
+        // Search
+        EditText searchEt = findViewById(R.id.searchEt);
+        ImageView searchIcon = findViewById(R.id.searchIcon);
+
+        searchIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String keyword = searchEt.getText().toString().trim();
+                if (!keyword.isEmpty()) {
+                    Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+                    intent.putExtra("keyword", keyword);
+                    intent.putExtra("userId", userId);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(HomeActivity.this, "Nhập nội dung tìm kiếm", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+    }
+
+    @Override
+    protected int getCurrentNavItemId() {
+        return R.id.nav_home;
     }
 
     private void loadCategories() {
@@ -136,6 +155,7 @@ public class HomeActivity extends AppCompatActivity {
                         // Chuyển categoryId sang SearchActivity
                         Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
                         intent.putExtra("categoryId", category.getCategoryId()); // Truyền categoryId
+                        intent.putExtra("userId", userId);
                         startActivity(intent);
                     });
                     categoryRecyclerView.setAdapter(categoryAdapter);
@@ -154,11 +174,11 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void loadNewBooks() {
-        apiService.getNewBooks().enqueue(new Callback<List<Book>>() {
+        apiService.getNewBooks(userId).enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    newBookAdapter = new BookAdapter(HomeActivity.this, response.body());
+                    newBookAdapter = new BookAdapter(HomeActivity.this, response.body(), false);
                     newBooksRecyclerView.setAdapter(newBookAdapter);
 
                 }
@@ -172,11 +192,11 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void loadPopularBooks() {
-        apiService.getPopularBooks().enqueue(new Callback<List<Book>>() {
+        apiService.getPopularBooks(userId).enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    popularBookAdapter = new BookAdapter(HomeActivity.this, response.body());
+                    popularBookAdapter = new BookAdapter(HomeActivity.this, response.body(), false);
                     popularBooksRecyclerView.setAdapter(popularBookAdapter);
 
                 }

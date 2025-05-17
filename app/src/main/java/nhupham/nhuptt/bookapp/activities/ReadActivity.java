@@ -20,11 +20,17 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import nhupham.nhuptt.bookapp.R;
+import nhupham.nhuptt.bookapp.api.ApiClient;
+import nhupham.nhuptt.bookapp.api.ApiService;
+import nhupham.nhuptt.bookapp.models.ReadingProgress;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class ReadActivity extends AppCompatActivity {
 
@@ -32,6 +38,8 @@ public class ReadActivity extends AppCompatActivity {
     private LinearLayout loadingLayout;  // Thêm biến cho loadingLayout
     private TextView titleTv;
     private ImageView backIv;
+    private ApiService apiService;
+    private int userId, bookId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +51,33 @@ public class ReadActivity extends AppCompatActivity {
         backIv = findViewById(R.id.backIv);
         loadingLayout = findViewById(R.id.loadingLayout);  // Khởi tạo loadingLayout
 
+        apiService = ApiClient.getClient().create(ApiService.class);
         String title = getIntent().getStringExtra("title");
         String fileUrl = getIntent().getStringExtra("fileUrl");
+        userId = getIntent().getIntExtra("userId", -1);
+        bookId = getIntent().getIntExtra("bookId", 0);
 
         titleTv.setText(title);
 
         downloadAndDisplayPdf(fileUrl);
+        apiService.getReadingProgress(userId, bookId).enqueue(new retrofit2.Callback<ReadingProgress>() {
+            @Override
+            public void onResponse(retrofit2.Call<ReadingProgress> call, retrofit2.Response<ReadingProgress> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    int lastPage = response.body().getLastPage();
+                    pdfView.jumpTo(lastPage, true);
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ReadingProgress> call, Throwable t) {
+                // Xử lý lỗi
+            }
+        });
+
 
         backIv.setOnClickListener(v -> onBackPressed());
+
     }
 
     private void downloadAndDisplayPdf(String fileUrl) {
@@ -123,6 +150,10 @@ public class ReadActivity extends AppCompatActivity {
             pdfView.setVisibility(View.VISIBLE);
 
             pdfView.fromFile(pdfFile)
+                    .defaultPage(0)
+                    .onPageChange((page, pageCount) -> {
+                        saveReadingProgress(userId, bookId, page);
+                    })
                     .onError(t -> {
                         Log.e("PDF_VIEW", "Lỗi khi load PDF: " + t.getMessage());
                         runOnUiThread(() -> showError("Lỗi khi load PDF"));
@@ -157,4 +188,26 @@ public class ReadActivity extends AppCompatActivity {
             Toast.makeText(ReadActivity.this, message, Toast.LENGTH_LONG).show();
         });
     }
+
+    private void saveReadingProgress(int userId, int bookId, int lastPage) {
+        Log.d("PDF_PAGE", "Đang ở trang: " + lastPage + userId + bookId);
+        apiService.saveReadingProgress(userId, bookId, lastPage).enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull retrofit2.Call<ResponseBody> call, @NonNull retrofit2.Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Log.d("SAVE_PROGRESS", "Tiến độ đọc đã được lưu");
+                } else {
+                    Log.e("SAVE_PROGRESS", "Lỗi server: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull retrofit2.Call<ResponseBody> call, @NonNull Throwable t) {
+                Log.e("SAVE_PROGRESS", "Lỗi mạng: " + t.getMessage());
+            }
+        });
+    }
+
+
+
 }

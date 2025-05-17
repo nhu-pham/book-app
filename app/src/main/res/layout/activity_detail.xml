@@ -5,6 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF"
+        android:fitsSystemWindows="true"
         tools:context=".activities.DetailActivity">
 
         <!-- ScrollView để cuộn nội dung -->
@@ -243,7 +244,8 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/comments_recycler_view"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="50dp" />
                 </LinearLayout>
 
             </LinearLayout>

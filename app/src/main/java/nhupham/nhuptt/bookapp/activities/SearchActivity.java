@@ -1,6 +1,8 @@
 package nhupham.nhuptt.bookapp.activities;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import nhupham.nhuptt.bookapp.R;
@@ -27,11 +30,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends BaseActivity {
     private ApiService apiService;
     private RecyclerView optionRecyclerView;
     private CategoryAdapter categoryAdapter;
     private BookAdapter bookAdapter;
+    private List<Book> bookList;
+
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,7 @@ public class SearchActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        setupBottomNavigation();
 
         RecyclerView booksRv = findViewById(R.id.booksRv);
         EditText searchEt = findViewById(R.id.searchEt);
@@ -55,8 +62,9 @@ public class SearchActivity extends AppCompatActivity {
         optionRecyclerView = findViewById(R.id.booksRv);
         optionRecyclerView.setLayoutManager(new GridLayoutManager(SearchActivity.this, 2));
 
-        // Lấy categoryId từ Intent
+        // Lấy categoryId, userId từ Intent
         int categoryId = getIntent().getIntExtra("categoryId", -1); // Lấy categoryId
+        userId = getIntent().getIntExtra("userId", -1); // Lấy userId
 
         // Nếu categoryId hợp lệ, tải sách theo thể loại
         if (categoryId != -1) {
@@ -81,6 +89,40 @@ public class SearchActivity extends AppCompatActivity {
             }
         }
 
+        // Search
+        String keyword = getIntent().getStringExtra("keyword");
+
+        searchEt.setText(keyword);
+
+        if (keyword != null && !keyword.isEmpty()) {
+            searchEt.setText(keyword);
+            searchBooks(keyword);
+        }
+
+        searchEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String newKeyword = s.toString().trim();
+                if (!newKeyword.isEmpty()) {
+                    searchBooks(newKeyword);
+                } else {
+                    if (bookAdapter != null) {
+                        bookAdapter.updateData(bookList);
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    protected int getCurrentNavItemId() {
+        return R.id.nav_home;
     }
 
     private void loadCategories() {
@@ -106,12 +148,12 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void loadNewBooks() {
-        apiService.getAllNewBooks().enqueue(new Callback<List<Book>>() {
+        apiService.getAllNewBooks(userId).enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
                 if (response.isSuccessful()) {
-                    List<Book> bookList = response.body();
-                    bookAdapter = new BookAdapter(SearchActivity.this, bookList);
+                    bookList = response.body();
+                    bookAdapter = new BookAdapter(SearchActivity.this, bookList, false);
                     optionRecyclerView.setAdapter(bookAdapter);
                 }
             }
@@ -124,12 +166,12 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void loadPopularBooks() {
-        apiService.getAllPopularBooks().enqueue(new Callback<List<Book>>() {
+        apiService.getAllPopularBooks(userId).enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
                 if (response.isSuccessful()) {
-                    List<Book> bookList = response.body();
-                    bookAdapter = new BookAdapter(SearchActivity.this, bookList);
+                    bookList = response.body();
+                    bookAdapter = new BookAdapter(SearchActivity.this, bookList, false);
                     optionRecyclerView.setAdapter(bookAdapter);
                 }
             }
@@ -142,12 +184,12 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void loadBooksByCategory(Integer categoryId) {
-        apiService.getBooksByCategory(categoryId).enqueue(new Callback<List<Book>>() {
+        apiService.getBooksByCategory(categoryId, userId).enqueue(new Callback<List<Book>>() {
             @Override
             public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Book> bookList = response.body();
-                    bookAdapter = new BookAdapter(SearchActivity.this, bookList);
+                    bookList = response.body();
+                    bookAdapter = new BookAdapter(SearchActivity.this, bookList, false);
                     optionRecyclerView.setAdapter(bookAdapter);
                 } else {
                     Toast.makeText(SearchActivity.this, "Không có sách cho thể loại này", Toast.LENGTH_SHORT).show();
@@ -161,6 +203,29 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
+    private void searchBooks(String keyword) {
+        apiService.searchBooks(keyword, userId).enqueue(new Callback<List<Book>>() {
+            @Override
+            public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    bookList = response.body();
+                    if (bookAdapter == null) {
+                        bookAdapter = new BookAdapter(SearchActivity.this, bookList, false);
+                        optionRecyclerView.setAdapter(bookAdapter);
+                    } else {
+                        bookAdapter.updateData(bookList);
+                    }
+                } else {
+                    Toast.makeText(SearchActivity.this, "Không tìm thấy kết quả", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Book>> call, Throwable t) {
+                Toast.makeText(SearchActivity.this, "Lỗi tìm kiếm", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 
 }

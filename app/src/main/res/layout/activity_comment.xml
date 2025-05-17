@@ -77,8 +77,8 @@
             android:isIndicator="false"
             android:clickable="true"
             android:focusable="true"
-
-        style="@style/Widget.AppCompat.RatingBar.Small" />
+            android:theme="@style/RatingBar.Yellow"
+            style="@style/Widget.AppCompat.RatingBar.Small" />
 
         <!-- Submit Button -->
         <Button

@@ -1,4 +1,4 @@
-<!-- res/layout/book_item.xml -->
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -6,28 +6,46 @@
     android:layout_margin="8dp"
     android:gravity="center">
 
-    <ImageView
-        android:id="@+id/bookImageIv"
-        android:layout_width="100dp"
-        android:layout_height="150dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/loading"/>
+    <FrameLayout
+        android:layout_width="137dp"
+        android:layout_height="150dp">
+
+        <ImageView
+            android:id="@+id/bookImageIv"
+            android:layout_width="136dp"
+            android:layout_height="match_parent"
+            android:contentDescription="Book cover"
+            android:scaleType="centerCrop"
+            android:src="@drawable/loading" />
+
+        <ImageView
+            android:id="@+id/favoriteIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_favorite_border" />
+
+
+
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/categoryTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Category"
+        android:layout_marginTop="4dp"
+        android:text="Fantasy"
         android:textColor="#008000"
-        android:textSize="14sp"
-        android:layout_marginTop="4dp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/bookTitleTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Book Title"
-        android:textStyle="bold"
+        android:layout_marginTop="2dp"
+        android:text="The book 1"
         android:textSize="14sp"
-        android:layout_marginTop="2dp" />
+        android:textStyle="bold" />
 </LinearLayout>
