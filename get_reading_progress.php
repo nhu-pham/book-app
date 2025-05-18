@@ -1,8 +1,9 @@
 <?php
 require_once 'db.php';
+header("Content-Type: application/json");
 
-$user_id = $_POST['user_id'];
-$book_id = $_POST['book_id'];
+$user_id = $_GET['user_id'];
+$book_id = $_GET['book_id'];
 
 $stmt = $conn->prepare("SELECT last_page FROM reading_progress WHERE user_id = ? AND book_id = ?");
 $stmt->bind_param("ii", $user_id, $book_id);
