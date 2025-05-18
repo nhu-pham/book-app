@@ -1,8 +1,12 @@
 package nhupham.nhuptt.bookapp.activities;
 
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +33,7 @@ import nhupham.nhuptt.bookapp.api.ApiClient;
 import nhupham.nhuptt.bookapp.api.ApiService;
 import nhupham.nhuptt.bookapp.models.Category;
 import nhupham.nhuptt.bookapp.models.Comment;
+import nhupham.nhuptt.bookapp.models.ReadingProgress;
 import nhupham.nhuptt.bookapp.responses.CommentResponse;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -47,7 +52,7 @@ public class DetailActivity extends BaseActivity {
     private CommentAdapter commentAdapter;
     private List<Comment> commentList = new ArrayList<>();
     private ApiService apiService;
-    private ImageView isFavoriteIv;
+    private ImageView isFavoriteIv, downloadIv;
 
 
     @Override
@@ -62,9 +67,6 @@ public class DetailActivity extends BaseActivity {
         bookId = getIntent().getIntExtra("bookId", 0);
 
         recyclerView = findViewById(R.id.comments_recycler_view);
-        addCommentIcon = findViewById(R.id.add_comment_icon);
-
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentAdapter = new CommentAdapter(commentList);
         recyclerView.setAdapter(commentAdapter);
@@ -78,6 +80,8 @@ public class DetailActivity extends BaseActivity {
         bookRating = findViewById(R.id.book_rating);
         noCommentsText = findViewById(R.id.no_comments_text);
         isFavoriteIv = findViewById(R.id.favoriteIcon);
+        addCommentIcon = findViewById(R.id.add_comment_icon);
+        downloadIv = findViewById(R.id.download_icon);
 
 
         // Nhận dữ liệu từ Intent
@@ -118,17 +122,38 @@ public class DetailActivity extends BaseActivity {
         getComments(bookId);
 
         readNowButton.setOnClickListener(v -> {
-            Intent intentRead = new Intent(DetailActivity.this, ReadActivity.class);
-            intentRead.putExtra("title", title);
-            intentRead.putExtra("fileUrl", fileUrl);
-            intentRead.putExtra("bookId", bookId);
-            intentRead.putExtra("userId", userId);
-            startActivity(intentRead);
+            apiService.getReadingProgress(userId, bookId).enqueue(new Callback<ReadingProgress>() {
+                @Override
+                public void onResponse(Call<ReadingProgress> call, Response<ReadingProgress> response) {
+                    int lastPage = 0;
+                    if (response.isSuccessful() && response.body() != null) {
+                        lastPage = response.body().getLastPage();
+                    }
+
+                    Intent intentRead = new Intent(DetailActivity.this, ReadActivity.class);
+                    intentRead.putExtra("title", title);
+                    intentRead.putExtra("fileUrl", fileUrl);
+                    intentRead.putExtra("bookId", bookId);
+                    intentRead.putExtra("userId", userId);
+                    intentRead.putExtra("lastPage", lastPage); // truyền trang cuối cùng đã đọc
+                    startActivity(intentRead);
+                }
+
+                @Override
+                public void onFailure(Call<ReadingProgress> call, Throwable t) {
+                    Toast.makeText(DetailActivity.this, "Không thể lấy tiến độ đọc", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
         addCommentIcon.setOnClickListener(v -> {
             showAddCommentDialog();
         });
+
+        downloadIv.setOnClickListener(v -> {
+            downloadPdf(fileUrl, title + ".pdf");
+        });
+
     }
 
     @Override
@@ -236,5 +261,20 @@ public class DetailActivity extends BaseActivity {
         return sp.getInt("user_id", -1);
     }
 
+    private void downloadPdf(String fileUrl, String fileName) {
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(fileUrl));
+        request.setTitle("Đang tải PDF");
+        request.setDescription("Đang tải " + fileName);
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+        request.setMimeType("application/pdf");
 
+        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        if (manager != null) {
+            manager.enqueue(request);
+            Toast.makeText(this, "Quá trình tải bắt đầu...", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Lỗi tải PDF", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

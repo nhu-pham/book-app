@@ -70,18 +70,18 @@ public class LoginActivity extends AppCompatActivity {
         password = binding.passwdEt.getText().toString();
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "Invalid email pattern...!", Toast.LENGTH_SHORT).show();
+            binding.emailEt.setError("Định dạng email không đúng");
         } else if (TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "Enter your password...!", Toast.LENGTH_SHORT).show();
+            binding.passwdEt.setError("Vui lòng nhập mật khẩu");
         } else if (password.length() < 6) {
-            Toast.makeText(this, "Password must be at least 6 character", Toast.LENGTH_SHORT).show();
+            binding.passwdEt.setError("Mật khẩu phải có ít nhất 6 ký tự");
         } else {
             loginUser();
         }
     }
 
     private void loginUser() {
-        progressDialog.setMessage("Logging in");
+        progressDialog.setMessage("Đang đăng nhập...");
         progressDialog.show();
 
         Call<LoginResponse> call = apiService.login(email, password);

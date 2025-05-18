@@ -39,7 +39,7 @@ public class ReadActivity extends AppCompatActivity {
     private TextView titleTv;
     private ImageView backIv;
     private ApiService apiService;
-    private int userId, bookId;
+    private int userId, bookId, lastPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,27 +54,13 @@ public class ReadActivity extends AppCompatActivity {
         apiService = ApiClient.getClient().create(ApiService.class);
         String title = getIntent().getStringExtra("title");
         String fileUrl = getIntent().getStringExtra("fileUrl");
+        lastPage = getIntent().getIntExtra("lastPage", 0);
         userId = getIntent().getIntExtra("userId", -1);
         bookId = getIntent().getIntExtra("bookId", 0);
 
         titleTv.setText(title);
 
         downloadAndDisplayPdf(fileUrl);
-        apiService.getReadingProgress(userId, bookId).enqueue(new retrofit2.Callback<ReadingProgress>() {
-            @Override
-            public void onResponse(retrofit2.Call<ReadingProgress> call, retrofit2.Response<ReadingProgress> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    int lastPage = response.body().getLastPage();
-                    pdfView.jumpTo(lastPage, true);
-                }
-            }
-
-            @Override
-            public void onFailure(retrofit2.Call<ReadingProgress> call, Throwable t) {
-                // Xử lý lỗi
-            }
-        });
-
 
         backIv.setOnClickListener(v -> onBackPressed());
 
@@ -145,12 +131,13 @@ public class ReadActivity extends AppCompatActivity {
     }
 
     private void displayPdf(File pdfFile) {
+        Log.e("READ", "Số trang:" + lastPage);
         try {
             loadingLayout.setVisibility(View.GONE);  // Ẩn khi hiển thị PDF
             pdfView.setVisibility(View.VISIBLE);
 
             pdfView.fromFile(pdfFile)
-                    .defaultPage(0)
+                    .defaultPage(lastPage)
                     .onPageChange((page, pageCount) -> {
                         saveReadingProgress(userId, bookId, page);
                     })
@@ -162,7 +149,6 @@ public class ReadActivity extends AppCompatActivity {
                     .enableSwipe(true)
                     .swipeHorizontal(false)
                     .enableDoubletap(true)
-                    .defaultPage(0)
                     .enableAnnotationRendering(false)
                     .password(null)
                     .scrollHandle(null)

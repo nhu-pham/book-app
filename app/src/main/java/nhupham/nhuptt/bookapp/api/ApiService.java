@@ -2,19 +2,26 @@ package nhupham.nhuptt.bookapp.api;
 
 import java.util.List;
 
+import nhupham.nhuptt.bookapp.models.ApiResponse;
 import nhupham.nhuptt.bookapp.models.Book;
 import nhupham.nhuptt.bookapp.models.Category;
 import nhupham.nhuptt.bookapp.models.Comment;
 import nhupham.nhuptt.bookapp.models.ReadingProgress;
+import nhupham.nhuptt.bookapp.models.User;
 import nhupham.nhuptt.bookapp.responses.CommentResponse;
 import nhupham.nhuptt.bookapp.responses.LoginResponse;
 import nhupham.nhuptt.bookapp.responses.RegisterResponse;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -114,5 +121,25 @@ public interface ApiService {
 
     @GET("get_read_books.php")
     Call<List<Book>> getReadBooks(@Query("user_id") int userId);
+
+    @GET("get_profile.php")
+    Call<User> getUserProfile(@Query("user_id") int userId);
+
+    @Multipart
+    @POST("update_profile.php")
+    Call<ResponseBody> updateProfile(
+            @Part("user_id") RequestBody id,
+            @Part("username") RequestBody name,
+            @Part("email") RequestBody email,
+            @Part MultipartBody.Part avatar
+    );
+
+    @FormUrlEncoded
+    @POST("change_password.php")
+    Call<ApiResponse> changePassword(
+            @Field("user_id") int userId,
+            @Field("old_password") String oldPassword,
+            @Field("new_password") String newPassword
+    );
 
 }

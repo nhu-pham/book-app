@@ -38,6 +38,7 @@
 
             <!-- Option 1: Personal information -->
             <LinearLayout
+                android:id="@+id/personalInfoLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="12dp"
@@ -74,6 +75,7 @@
 
             <!-- Option 2: Change password -->
             <LinearLayout
+                android:id="@+id/changePasswordLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="12dp"

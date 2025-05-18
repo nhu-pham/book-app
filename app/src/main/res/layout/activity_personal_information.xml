@@ -65,14 +65,16 @@
 
                 <!-- Avatar -->
                 <ImageView
+                    android:id="@+id/avatarIv"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/logo"
+                    android:src="@drawable/avt_default"
                     android:contentDescription="Avatar"
                     android:scaleType="centerCrop" />
 
                 <!-- Tên người dùng -->
                 <TextView
+                    android:id="@+id/nameTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nguyen Van A"
@@ -83,6 +85,7 @@
 
                 <!-- Email -->
                 <TextView
+                    android:id="@+id/emailTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="nguyenvana@gmail.com"
@@ -124,7 +127,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:paddingHorizontal="12dp"
-                        android:text="Nguyen Van A"
                         android:textSize="14sp"
                         android:textColor="@android:color/black"
                         android:inputType="textPersonName|textCapWords" />
@@ -155,7 +157,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:paddingHorizontal="12dp"
-                        android:text="nguyenvana@gmail.com"
                         android:textSize="14sp"
                         android:textColor="@android:color/black"
                         android:inputType="textEmailAddress" />

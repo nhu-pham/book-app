@@ -76,17 +76,17 @@ public class RegisterActivity extends AppCompatActivity {
 
         // validate data
         if (TextUtils.isEmpty(name)) {
-            Toast.makeText(this, "Enter your name...!", Toast.LENGTH_SHORT).show();
+            binding.nameEt.setError("Vui lòng nhập tên người dùng");
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "Invalid email pattern...!", Toast.LENGTH_SHORT).show();
+            binding.emailEt.setError("Định dạng email không đúng");
         } else if (TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "Enter your password...!", Toast.LENGTH_SHORT).show();
+            binding.passwdEt.setError("Vui lòng nhập mật khẩu");
         } else if (password.length() < 6) {
-            Toast.makeText(this, "Password must be at least 6 character...!", Toast.LENGTH_SHORT).show();
+            binding.passwdEt.setError("Mật khẩu phải có ít nhất 6 kí tự");
         } else if (TextUtils.isEmpty(confirmPassword)) {
-            Toast.makeText(this, "Enter confirm password...!", Toast.LENGTH_SHORT).show();
+            binding.cPasswdEt.setError("Vui lòng xác nhận mật khẩu");
         } else if (!password.equals(confirmPassword)) {
-            Toast.makeText(this, "Password doesn't match...!", Toast.LENGTH_SHORT).show();
+            binding.cPasswdEt.setError("Mật khẩu không trùng khớp");
         } else {
             createUserAccount();
         }
