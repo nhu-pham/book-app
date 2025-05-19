@@ -106,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     RegisterResponse res = response.body();
                     Toast.makeText(RegisterActivity.this, res.getMessage(), Toast.LENGTH_SHORT).show();
-                    if (res.isStatus()) {
+                    if (res.isSuccess()) {
                         User user = res.getUser();
                         Log.d("Register", "User ID: " + user.getUserId());
                         startActivity(new Intent(RegisterActivity.this, LoginActivity.class));

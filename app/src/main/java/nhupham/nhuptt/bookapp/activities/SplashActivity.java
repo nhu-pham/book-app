@@ -12,8 +12,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import nhupham.nhuptt.bookapp.R;
+import nhupham.nhuptt.bookapp.api.ApiClient;
+import nhupham.nhuptt.bookapp.api.ApiService;
+import nhupham.nhuptt.bookapp.responses.CheckTokenResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SplashActivity extends AppCompatActivity {
+    private ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,20 +33,34 @@ public class SplashActivity extends AppCompatActivity {
             return insets;
         });
 
-        // start main screen after 2 seconds
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                SharedPreferences sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE);
-                boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+        apiService = ApiClient.getClient().create(ApiService.class);
 
-                if (isLoggedIn) {
-                    startActivity(new Intent(SplashActivity.this, HomeActivity.class));
-                    finish();
-                } else {
-                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-                    finish();
-                }
+        // start main screen after 2 seconds
+        new Handler().postDelayed(() -> {
+            SharedPreferences prefs = getSharedPreferences("user_session", MODE_PRIVATE);
+            String token = prefs.getString("access_token", null);
+
+            if (token != null) {
+                apiService.checkToken(token).enqueue(new Callback<CheckTokenResponse>() {
+                    @Override
+                    public void onResponse(Call<CheckTokenResponse> call, Response<CheckTokenResponse> response) {
+                        if (response.body() != null && response.body().isValid()) {
+                            startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                        } else {
+                            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                        }
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(Call<CheckTokenResponse> call, Throwable t) {
+                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                        finish();
+                    }
+                });
+            } else {
+                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                finish();
             }
         }, 2000);
     }

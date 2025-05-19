@@ -80,7 +80,7 @@ public class PersonalInformationActivity extends BaseActivity {
 
         loadProfile();
 
-        backBtn.setOnClickListener(v -> finish());
+        backBtn.setOnClickListener(v -> onBackPressed());
 
         avatarIv.setOnClickListener(v -> openImagePicker());
 

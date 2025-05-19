@@ -7,12 +7,16 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import com.google.android.material.textfield.TextInputEditText;
 
 import nhupham.nhuptt.bookapp.R;
 import nhupham.nhuptt.bookapp.api.ApiClient;
 import nhupham.nhuptt.bookapp.api.ApiService;
-import nhupham.nhuptt.bookapp.models.ApiResponse;
+import nhupham.nhuptt.bookapp.responses.ApiResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,6 +31,12 @@ public class ChangePasswordActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
+        setupBottomNavigation();
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         apiService = ApiClient.getClient().create(ApiService.class);
         SharedPreferences sp = getSharedPreferences("user_session", MODE_PRIVATE);
@@ -75,9 +85,7 @@ public class ChangePasswordActivity extends BaseActivity {
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     ApiResponse res = response.body();
-                    if (res.getSuccess()) {
-                        String hashedPwd = res.getResponsePwd();
-                        Log.e("HashedPwd", "New hashed password: " + hashedPwd);
+                    if (res.isSuccess()) {
                         Toast.makeText(ChangePasswordActivity.this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
                         finish();
                     } else {

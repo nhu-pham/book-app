@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
@@ -62,6 +63,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        binding.forgotTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
+            }
+        });
         }
 
     private String email = "", password = "";
@@ -95,10 +102,12 @@ public class LoginActivity extends AppCompatActivity {
                         SharedPreferences sp = getSharedPreferences("user_session", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sp.edit();
                         editor.putBoolean("isLoggedIn", true);
+                        editor.putString("access_token", response.body().getToken()).apply();
                         editor.putInt("user_id", response.body().getUser().getUserId());
                         editor.putString("username", response.body().getUser().getUsername());
                         editor.putString("email", response.body().getUser().getEmail());
-                        editor.apply();
+
+                        editor.commit();
 
                         startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                         finish();
@@ -112,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(LoginActivity.this, "Login failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Lỗi đăng nhập: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

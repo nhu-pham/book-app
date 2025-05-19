@@ -2,12 +2,13 @@ package nhupham.nhuptt.bookapp.api;
 
 import java.util.List;
 
-import nhupham.nhuptt.bookapp.models.ApiResponse;
+import nhupham.nhuptt.bookapp.responses.ApiResponse;
 import nhupham.nhuptt.bookapp.models.Book;
 import nhupham.nhuptt.bookapp.models.Category;
 import nhupham.nhuptt.bookapp.models.Comment;
 import nhupham.nhuptt.bookapp.models.ReadingProgress;
 import nhupham.nhuptt.bookapp.models.User;
+import nhupham.nhuptt.bookapp.responses.CheckTokenResponse;
 import nhupham.nhuptt.bookapp.responses.CommentResponse;
 import nhupham.nhuptt.bookapp.responses.LoginResponse;
 import nhupham.nhuptt.bookapp.responses.RegisterResponse;
@@ -15,7 +16,6 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -139,6 +139,25 @@ public interface ApiService {
     Call<ApiResponse> changePassword(
             @Field("user_id") int userId,
             @Field("old_password") String oldPassword,
+            @Field("new_password") String newPassword
+    );
+
+    @FormUrlEncoded
+    @POST("send_reset_link.php")
+    Call<ApiResponse> sendResetPasswordEmail(@Field("email") String email);
+
+    @FormUrlEncoded
+    @POST("check_token.php")
+    Call<CheckTokenResponse> checkToken(@Field("token") String token);
+
+    @FormUrlEncoded
+    @POST("logout.php")
+    Call<ApiResponse> logout(@Field("token") String token);
+
+    @FormUrlEncoded
+    @POST("reset_password.php")
+    Call<ResponseBody> resetPassword(
+            @Field("token") String token,
             @Field("new_password") String newPassword
     );
 
