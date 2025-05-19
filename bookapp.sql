@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th5 17, 2025 lúc 10:16 AM
+-- Thời gian đã tạo: Th5 19, 2025 lúc 06:58 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -209,8 +209,39 @@ CREATE TABLE `reading_progress` (
 --
 
 INSERT INTO `reading_progress` (`id`, `user_id`, `book_id`, `last_page`, `updated_at`) VALUES
-(26, 1, 46, 9, '2025-05-17 07:12:26'),
-(29, 1, 12, 4, '2025-05-17 07:11:07');
+(26, 1, 46, 42, '2025-05-18 15:21:53'),
+(29, 1, 12, 15, '2025-05-18 15:29:00');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `reset_tokens`
+--
+
+CREATE TABLE `reset_tokens` (
+  `reset_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `expires_at` datetime NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `reset_tokens`
+--
+
+INSERT INTO `reset_tokens` (`reset_id`, `user_id`, `token`, `expires_at`, `created_at`) VALUES
+(1, 1, '365a44f8e131ba7029828d4cec8bd7a755d6d0ab1f2a4caf0081b73473f7e84d', '2025-05-19 16:59:55', '2025-05-19 21:44:55'),
+(2, 1, 'de3b06c6ff5e2d489a3e137f610abaaf2500a7acbdb22f4e7b31d229af96f087', '2025-05-19 17:02:56', '2025-05-19 21:47:56'),
+(3, 1, '9c3789b7e63a081ed88db25fd9deda4ed5662488183c4015da7da8d094d67d57', '2025-05-19 17:10:10', '2025-05-19 21:55:10'),
+(4, 1, 'a55dcdccb5ba470254011863ca900a48ee7db2ac0df9b9e4d173821579b23808', '2025-05-19 17:12:46', '2025-05-19 21:57:46'),
+(5, 1, 'ef215ec14200517f4ae293a8c603f4bb7c610230b917889be64cbe3c0b7301de', '2025-05-19 17:18:04', '2025-05-19 22:03:04'),
+(6, 1, '7411c9f9e78c08f67df6e7790fd9ad0c8b9a9eef0d2c61459bc590827ee4ad70', '2025-05-19 18:46:26', '2025-05-19 23:31:26'),
+(7, 1, '92d3ed691c5cb3a267ede75fcb15817401f714f8865535b2c375d6ffdc148b9a', '2025-05-19 18:52:53', '2025-05-19 23:37:53'),
+(8, 1, '1af6b3107c3616eafe7f99ae643c71e068b5e6df8da43a0efb027d7c990f0dde', '2025-05-19 18:55:44', '2025-05-19 23:40:44'),
+(9, 1, '763af46ae5280bef288f4d4a160eecd3db22fc05613b104f0824dffbccee4a0a', '2025-05-19 18:57:27', '2025-05-19 23:42:27'),
+(10, 1, '7ad4be4c28d06a873a2fd87578b77bca75f36860b3e96c4cf83a4d1f598746eb', '2025-05-19 19:01:17', '2025-05-19 23:46:17'),
+(11, 1, 'd7d24705c06e8256355f029e5a331a27ef93e515c9961420b5434a6fa2eb5b67', '2025-05-19 19:06:17', '2025-05-19 23:51:17');
 
 -- --------------------------------------------------------
 
@@ -223,7 +254,7 @@ CREATE TABLE `users` (
   `username` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password_hash` varchar(255) NOT NULL,
-  `avatar_url` varchar(500) DEFAULT NULL,
+  `avatar_url` varchar(255) DEFAULT 'uploads/avt_default.png',
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -233,17 +264,38 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `email`, `password_hash`, `avatar_url`, `created_at`, `updated_at`) VALUES
-(1, 'Thao Nhu', 'abc@gmail.com', '$2y$10$9EjemYKelaWAS3g2CmDCn.3jvvmu21Aj8CgLuBmCszXdij.CDZOM.', NULL, '2025-05-01 02:00:13', '2025-05-01 02:00:13'),
-(3, 'nguyenvana', 'nguyenvana@example.com', 'hash1', NULL, '2025-05-07 22:33:53', '2025-05-07 22:33:53'),
-(4, 'tranthib', 'tranthib@example.com', 'hash2', NULL, '2025-05-07 22:33:53', '2025-05-07 22:33:53'),
-(5, 'lehoangc', 'lehoangc@example.com', 'hash3', NULL, '2025-05-07 22:33:53', '2025-05-07 22:33:53'),
-(6, 'phamthid', 'phamthid@example.com', 'hash4', NULL, '2025-05-07 22:33:53', '2025-05-07 22:33:53'),
-(7, 'doanquange', 'doanquange@example.com', 'hash5', NULL, '2025-05-07 22:33:53', '2025-05-07 22:33:53'),
-(8, 'buithef', 'buithef@example.com', 'hash6', NULL, '2025-05-07 22:33:53', '2025-05-07 22:33:53'),
-(9, 'dangthig', 'dangthig@example.com', 'hash7', NULL, '2025-05-07 22:33:53', '2025-05-07 22:33:53'),
-(10, 'hoangminhh', 'hoangminhh@example.com', 'hash8', NULL, '2025-05-07 22:33:53', '2025-05-07 22:33:53'),
-(11, 'vothii', 'vothii@example.com', 'hash9', NULL, '2025-05-07 22:33:53', '2025-05-07 22:33:53'),
-(12, 'truongthanhj', 'truongthanhj@example.com', 'hash10', NULL, '2025-05-07 22:33:53', '2025-05-07 22:33:53');
+(1, 'Thao Nhu Pham', '22521055@gm.uit.edu.vn', '$2y$10$c1E.ZJJQK.ACnpHbHHGjSeRhueg5xMwe.2FSVhRrAxtdXqDgBAdJK', 'uploads/682a3eb581a30_temp_image.jpg', '2025-05-01 02:00:13', '2025-05-19 23:54:54'),
+(3, 'nguyenvana', 'nguyenvana@example.com', 'hash1', 'uploads/avt_default.png', '2025-05-07 22:33:53', '2025-05-19 02:00:32'),
+(4, 'tranthib', 'tranthib@example.com', 'hash2', 'uploads/avt_default.png', '2025-05-07 22:33:53', '2025-05-19 02:00:35'),
+(5, 'lehoangc', 'lehoangc@example.com', 'hash3', 'uploads/avt_default.png', '2025-05-07 22:33:53', '2025-05-19 02:00:37'),
+(6, 'phamthid', 'phamthid@example.com', 'hash4', 'uploads/avt_default.png', '2025-05-07 22:33:53', '2025-05-19 02:00:46'),
+(7, 'doanquange', 'doanquange@example.com', 'hash5', 'uploads/avt_default.png', '2025-05-07 22:33:53', '2025-05-19 02:00:44'),
+(8, 'buithef', 'buithef@example.com', 'hash6', 'uploads/avt_default.png', '2025-05-07 22:33:53', '2025-05-19 02:00:42'),
+(9, 'dangthig', 'dangthig@example.com', 'hash7', 'uploads/avt_default.png', '2025-05-07 22:33:53', '2025-05-19 02:00:50'),
+(10, 'hoangminhh', 'hoangminhh@example.com', 'hash8', 'uploads/avt_default.png', '2025-05-07 22:33:53', '2025-05-19 02:00:39'),
+(11, 'vothii', 'vothii@example.com', 'hash9', 'uploads/avt_default.png', '2025-05-07 22:33:53', '2025-05-19 02:00:48'),
+(12, 'truongthanhj', 'truongthanhj@example.com', 'hash10', 'uploads/avt_default.png', '2025-05-07 22:33:53', '2025-05-19 02:00:52');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `user_tokens`
+--
+
+CREATE TABLE `user_tokens` (
+  `token_id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `token` varchar(255) DEFAULT NULL,
+  `expires_at` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `user_tokens`
+--
+
+INSERT INTO `user_tokens` (`token_id`, `user_id`, `token`, `expires_at`, `created_at`) VALUES
+(6, 1, '1e52da2d9c72bd1bd018643cfefc1eb3fd1476fcae29a1e4547d0f979f85261e', '2025-05-20 00:11:09', '2025-05-19 23:56:09');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -286,11 +338,26 @@ ALTER TABLE `reading_progress`
   ADD UNIQUE KEY `user_id` (`user_id`,`book_id`);
 
 --
+-- Chỉ mục cho bảng `reset_tokens`
+--
+ALTER TABLE `reset_tokens`
+  ADD PRIMARY KEY (`reset_id`),
+  ADD UNIQUE KEY `token` (`token`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- Chỉ mục cho bảng `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`),
   ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Chỉ mục cho bảng `user_tokens`
+--
+ALTER TABLE `user_tokens`
+  ADD PRIMARY KEY (`token_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- AUTO_INCREMENT cho các bảng đã đổ
@@ -324,13 +391,25 @@ ALTER TABLE `ratings`
 -- AUTO_INCREMENT cho bảng `reading_progress`
 --
 ALTER TABLE `reading_progress`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=206;
+
+--
+-- AUTO_INCREMENT cho bảng `reset_tokens`
+--
+ALTER TABLE `reset_tokens`
+  MODIFY `reset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
   MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT cho bảng `user_tokens`
+--
+ALTER TABLE `user_tokens`
+  MODIFY `token_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
@@ -355,6 +434,18 @@ ALTER TABLE `favorites`
 ALTER TABLE `ratings`
   ADD CONSTRAINT `ratings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
   ADD CONSTRAINT `ratings_ibfk_2` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`);
+
+--
+-- Các ràng buộc cho bảng `reset_tokens`
+--
+ALTER TABLE `reset_tokens`
+  ADD CONSTRAINT `reset_tokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `user_tokens`
+--
+ALTER TABLE `user_tokens`
+  ADD CONSTRAINT `user_tokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

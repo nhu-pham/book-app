@@ -6,7 +6,7 @@ $user_id = $_POST['user_id'];
 $old_password = $_POST['old_password'];
 $new_password = $_POST['new_password'];
 
-$stmt = $conn->prepare("SELECT password_hash FROM users WHERE id=?");
+$stmt = $conn->prepare("SELECT password_hash FROM users WHERE user_id=?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $stmt->bind_result($hashedPassword);
@@ -30,7 +30,7 @@ if ($stmt->execute()) {
     echo json_encode([
         "success" => true,
         "message" => "Password updated",
-        "responsePwd" => $newHashedPassword 
+        "responsePwd" => $newHashedPassword
     ]);
 } else {
     echo json_encode([

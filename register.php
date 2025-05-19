@@ -10,10 +10,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'] ?? '';
 
     if (!$username || !$email || !$password) {
-        $response['status'] = false;
+        $response['success'] = false;
         $response['message'] = "All fields are required.";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $response['status'] = false;
+        $response['success'] = false;
         $response['message'] = "Invalid email format.";
     } else {
         $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
-            $response['status'] = false;
+            $response['success'] = false;
             $response['message'] = "Email already registered.";
         } else {
             $password_hash = password_hash($password, PASSWORD_BCRYPT);
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->bind_param("sss", $username, $email, $password_hash);
             if ($stmt->execute()) {
                 $user_id = $stmt->insert_id;
-                $response['status'] = true;
+                $response['success'] = true;
                 $response['message'] = "Registration successful.";
                 $response['user'] = [
                     'user_id' => $user_id,
@@ -39,13 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     'avatar_url' => null
                 ];
             } else {
-                $response['status'] = false;
+                $response['success'] = false;
                 $response['message'] = "Database error.";
             }
         }
     }
 } else {
-    $response['status'] = false;
+    $response['success'] = false;
     $response['message'] = "Invalid request method.";
 }
 
