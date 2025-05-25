@@ -16,7 +16,7 @@ $stmt->close();
 if (!password_verify($old_password, $hashedPassword)) {
     echo json_encode([
         "success" => false,
-        "message" => "Old password is incorrect"
+        "message" => "Mật khẩu cũ không chính xác"
     ]);
     exit;
 }
@@ -29,13 +29,13 @@ $stmt->bind_param("si", $newHashedPassword, $user_id);
 if ($stmt->execute()) {
     echo json_encode([
         "success" => true,
-        "message" => "Password updated",
+        "message" => "Cập nhật mật khẩu thành công",
         "responsePwd" => $newHashedPassword
     ]);
 } else {
     echo json_encode([
         "success" => false,
-        "message" => "Failed to update password"
+        "message" => "Cập nhật mật khẩu không thành công"
     ]);
 }
 $stmt->close();

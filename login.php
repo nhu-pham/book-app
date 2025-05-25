@@ -41,10 +41,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ]
             ]);
         } else {
-            echo json_encode(["success" => false, "message" => "Invalid password"]);
+            echo json_encode(["success" => false, "message" => "Mật khẩu không đúng"]);
         }
     } else {
-        echo json_encode(["success" => false, "message" => "Email not found"]);
+        echo json_encode(["success" => false, "message" => "Không tìm thấy email"]);
     }
 }
 ?>

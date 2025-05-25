@@ -30,7 +30,10 @@ $user_id = $row['user_id'];
 
 // Tạo token reset
 $token = bin2hex(random_bytes(32));
-$expires_at = date('Y-m-d H:i:s', time() + 900); // 15 phút
+$now = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh')); // Hoặc timezone bạn dùng
+$expires = clone $now;
+$expires->modify('+15 minutes');
+$expires_at = $expires->format('Y-m-d H:i:s');
 
 // Lưu vào bảng reset_tokens
 $insert = $conn->prepare("INSERT INTO reset_tokens (user_id, token, expires_at) VALUES (?, ?, ?)");
