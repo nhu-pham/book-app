@@ -39,7 +39,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
         // Load ảnh
         Picasso.get()
-                .load(comment.getAvatar_url())
+                .load("http://192.168.1.13/api/" + comment.getAvatar_url())
                 .placeholder(R.drawable.avt_default) // Hình ảnh placeholder khi ảnh chưa được tải
                 .error(R.drawable.avt_default) // Hình ảnh khi xảy ra lỗi
                 .into(holder.avatarUrl);

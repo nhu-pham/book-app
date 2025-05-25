@@ -161,4 +161,8 @@ public interface ApiService {
             @Field("new_password") String newPassword
     );
 
+    @FormUrlEncoded
+    @POST("check_reset_token.php")
+    Call<ResponseBody> checkTokenValidity(@Field("token") String token);
+
 }

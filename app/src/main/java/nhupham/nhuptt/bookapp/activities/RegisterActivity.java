@@ -101,7 +101,7 @@ public class RegisterActivity extends AppCompatActivity {
         call.enqueue(new Callback<RegisterResponse>() {
             @Override
             public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
-                progressDialog.setMessage("Saving user infor");
+                progressDialog.setMessage("Đang lưu thông tin...");
                 if (response.isSuccessful() && response.body() != null) {
                     progressDialog.dismiss();
                     RegisterResponse res = response.body();

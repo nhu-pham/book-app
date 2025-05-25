@@ -43,10 +43,12 @@ public class NewPasswordActivity extends AppCompatActivity {
         Uri data = intent.getData();
         if (data != null && data.getQueryParameter("token") != null) {
             token = data.getQueryParameter("token");
+            checkTokenValidity(token);
         } else {
             Toast.makeText(this, "Token không hợp lệ!", Toast.LENGTH_SHORT).show();
             finish();
         }
+
 
         resetBtn.setOnClickListener(v -> {
             String newPassword = newPasswordEt.getText().toString().trim();
@@ -60,6 +62,28 @@ public class NewPasswordActivity extends AppCompatActivity {
                 Toast.makeText(this, "Mật khẩu không khớp!", Toast.LENGTH_SHORT).show();
             } else {
                 resetPassword(token, newPassword);
+            }
+        });
+    }
+
+    private void checkTokenValidity(String token) {
+        Log.e("Da", "DAVO");
+        apiService.checkTokenValidity(token).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Log.e("OK", "Dung");
+                    Toast.makeText(NewPasswordActivity.this, "Token đã hết hạn hoặc không hợp lệ!", Toast.LENGTH_SHORT).show();
+                    // Chuyển về LoginActivity
+                    startActivity(new Intent(NewPasswordActivity.this, LoginActivity.class));
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(NewPasswordActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }

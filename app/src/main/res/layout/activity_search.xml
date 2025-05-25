@@ -78,8 +78,6 @@
             android:scrollbars="vertical"
             android:paddingBottom="50dp"
             />
-
-
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
