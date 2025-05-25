@@ -35,16 +35,17 @@
                     android:background="@android:color/transparent"
                     android:layout_margin="10dp"
                     android:padding="5dp" />
+
                 <TextView
                     android:id="@+id/titleTv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginStart="12dp"
-                    android:text="Personal Information"
-                    android:textSize="20sp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Thông tin cá nhân"
                     android:textColor="@android:color/black"
-                    android:gravity="center" />
+                    android:textSize="20sp" />
             </LinearLayout>
 
             <!-- Đường kẻ -->
@@ -170,7 +171,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/cPasswdTil"
                     android:layout_marginTop="20dp"
-                    android:text="Reset"
+                    android:text="Cập nhật"
                     android:textColor="@color/white"
                     android:backgroundTint="#1E90FF"/>
                 <!-- Light gray -->
@@ -188,6 +189,9 @@
         android:background="@color/white"
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/gray01"
-        app:itemTextColor="@color/gray01" />
+        app:itemIconTint="@color/nav_item_color"
+        app:itemTextColor= "@color/nav_item_color"
+        app:itemBackground="@android:color/transparent"
+
+        />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

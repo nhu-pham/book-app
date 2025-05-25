@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +22,7 @@ import retrofit2.Response;
 
 public class NewPasswordActivity extends AppCompatActivity {
 
-    private TextInputEditText newPasswordEt, confirmPasswordEt;
+    private EditText newPasswordEt, confirmPasswordEt;
     private Button resetBtn;
     private String token;
     private ApiService apiService;

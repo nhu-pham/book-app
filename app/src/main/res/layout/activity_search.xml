@@ -40,7 +40,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Search"
+                android:text="Tìm kiếm"
                 android:textColor="@android:color/black"
                 android:textSize="20sp" />
 
@@ -63,7 +63,7 @@
             android:layout_marginTop="8dp"
             android:background="@android:drawable/editbox_background"
             android:drawableEnd="@drawable/ic_search_gray"
-            android:hint="Search books..."
+            android:hint="Tìm kiếm..."
             android:paddingStart="12dp"
             android:textColor="@android:color/black" />
 
@@ -90,6 +90,9 @@
         android:background="@color/white"
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/gray01"
-        app:itemTextColor="@color/gray01" />
+        app:itemIconTint="@color/nav_item_color"
+        app:itemTextColor= "@color/nav_item_color"
+        app:itemBackground="@android:color/transparent"
+
+        />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

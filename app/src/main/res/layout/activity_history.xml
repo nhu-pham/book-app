@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="12dp"
-                android:text="History"
+                android:text="Lịch sử"
                 android:textSize="20sp"
                 android:textColor="@android:color/black"
                 android:gravity="center"/>
@@ -52,7 +52,7 @@
             android:layout_height="40dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
-            android:hint="Search books..."
+            android:hint="Tìm kiếm..."
             android:paddingStart="12dp"
             android:background="@android:drawable/editbox_background"
             android:drawableEnd="@drawable/ic_search_gray"
@@ -70,7 +70,8 @@
 
     </LinearLayout>
 
-    <!-- Bottom Navigation giữ nguyên -->
+
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
@@ -79,6 +80,9 @@
         android:background="@color/white"
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/gray01"
-        app:itemTextColor="@color/gray01" />
+        app:itemIconTint="@color/nav_item_color"
+        app:itemTextColor= "@color/nav_item_color"
+        app:itemBackground="@android:color/transparent"
+
+        />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

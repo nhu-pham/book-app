@@ -159,7 +159,7 @@
                             android:layout_gravity="center"
                             android:layout_marginTop="8dp"
                             android:backgroundTint="#1E90FF"
-                            android:text="Read now"
+                            android:text="Đọc ngay"
                             android:textColor="#FFFFFF" />
                     </LinearLayout>
                 </LinearLayout>
@@ -260,6 +260,9 @@
             android:background="@color/white"
             app:menu="@menu/bottom_nav_menu"
             app:labelVisibilityMode="labeled"
-            app:itemIconTint="@color/gray01"
-            app:itemTextColor="@color/gray01" />
+            app:itemIconTint="@color/nav_item_color"
+            app:itemTextColor= "@color/nav_item_color"
+            app:itemBackground="@android:color/transparent"
+
+            />
     </RelativeLayout>

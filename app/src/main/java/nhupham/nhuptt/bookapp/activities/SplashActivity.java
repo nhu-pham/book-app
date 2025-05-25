@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView; // Import TextView
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,12 +24,19 @@ import retrofit2.Response;
 
 public class SplashActivity extends AppCompatActivity {
     private ApiService apiService;
+    private TextView welcomeText; // Declare welcomeText
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash);
+
+        // Initialize welcomeText
+        welcomeText = findViewById(R.id.welcomeText);
+
+
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -35,7 +45,7 @@ public class SplashActivity extends AppCompatActivity {
 
         apiService = ApiClient.getClient().create(ApiService.class);
 
-        // start main screen after 2 seconds
+        // Start main screen after 2 seconds
         new Handler().postDelayed(() -> {
             SharedPreferences prefs = getSharedPreferences("user_session", MODE_PRIVATE);
             String token = prefs.getString("access_token", null);

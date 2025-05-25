@@ -65,9 +65,9 @@ public class HomeActivity extends BaseActivity {
         // ImageSlider
         ImageSlider imageSlider = findViewById(R.id.imageSlider);
         ArrayList<SlideModel> slideModels = new ArrayList<>();
-        slideModels.add(new SlideModel(R.drawable.book1, ScaleTypes.FIT));
-        slideModels.add(new SlideModel(R.drawable.book2, ScaleTypes.FIT));
-        slideModels.add(new SlideModel(R.drawable.book3, ScaleTypes.FIT));
+        slideModels.add(new SlideModel(R.drawable.sach1, ScaleTypes.FIT));
+        slideModels.add(new SlideModel(R.drawable.sach2, ScaleTypes.FIT));
+        slideModels.add(new SlideModel(R.drawable.sach4, ScaleTypes.FIT));
         imageSlider.setImageList(slideModels, ScaleTypes.FIT);
 
         // Khởi tạo Retrofit

@@ -51,7 +51,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                     .error(R.drawable.error) // Hình ảnh khi xảy ra lỗi
                     .into(holder.categoryImageIv);
         } else {
-            holder.categoryImageIv.setImageResource(R.drawable.book1); // Hình ảnh mặc định khi không có URL
+            holder.categoryImageIv.setImageResource(R.drawable.error); // Hình ảnh mặc định khi không có URL
         }
 
         holder.itemView.setOnClickListener(v -> {

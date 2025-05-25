@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="12dp"
-                android:text="Add comment"
+                android:text="Bình luận"
                 android:textSize="20sp"
                 android:textColor="@android:color/black"
                 android:gravity="center" />
@@ -85,7 +85,7 @@
             android:id="@+id/submitBtn"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="Submit"
+            android:text="Bình luận"
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:enabled="true"

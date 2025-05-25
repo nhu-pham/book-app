@@ -19,7 +19,7 @@
             android:layout_height="110dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="40dp"
-            android:src="@drawable/logo"/>
+            android:src="@drawable/logo_2"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_below="@id/iconIv"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:text="Please Login"
+            android:text="Đăng nhập"
             android:textColor="@color/black"
             android:fontFamily="sans-serif-condensed"
             android:textSize="28dp"/>
@@ -83,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:drawable/edit_text"
                     android:drawableStart="@drawable/ic_key_gray"
-                    android:hint="  Password"
+                    android:hint="  Mật khẩu"
                     android:inputType="textPassword"
                     android:padding="10dp"
                     android:textColor="@color/black"
@@ -101,7 +101,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="5dp"
                 android:padding="5dp"
-                android:text="Forgot Password?"
+                android:text="Quên mật khẩu?"
                 android:textColor="@color/gray02" />
 
             <!-- Login Button -->
@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/forgotTv"
                 android:layout_marginTop="20dp"
-                android:text="Login"
+                android:text="Đăng nhâp"
                 android:textColor="@color/white"
                 android:backgroundTint="#1E90FF"
                 />

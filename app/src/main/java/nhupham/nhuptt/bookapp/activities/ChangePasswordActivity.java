@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -22,7 +23,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ChangePasswordActivity extends BaseActivity {
-    private TextInputEditText oldPasswordEt, newPasswordEt, confirmPasswordEt;
+    private EditText oldPasswordEt, newPasswordEt, confirmPasswordEt;
     private Button resetBtn;
     private ImageButton backBtn;
     private ApiService apiService;

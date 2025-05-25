@@ -28,7 +28,7 @@
         android:layout_height="110dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
-        android:src="@drawable/logo"/>
+        android:src="@drawable/logo_2"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -36,7 +36,7 @@
         android:layout_below="@id/iconIv"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="Create New Account"
+        android:text="Tạo tài khoản mới"
         android:textColor="@color/black"
         android:fontFamily="sans-serif-condensed"
         android:textSize="28dp"/>
@@ -65,8 +65,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:drawable/edit_text"
-                    android:drawableStart="@drawable/ic_people_gray"
-                    android:hint="  Name"
+                    android:drawableStart="@drawable/ic_person_gray"
+                    android:hint="  Họ và tên"
                     android:inputType="textPersonName|textCapWords"
                     android:padding="10dp"
                     android:textColor="@color/black"
@@ -115,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:drawable/edit_text"
                     android:drawableStart="@drawable/ic_key_gray"
-                    android:hint="  Password"
+                    android:hint="  Mật khẩu"
                     android:inputType="textPassword"
                     android:padding="10dp"
                     android:textColor="@color/black"
@@ -140,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:drawable/edit_text"
                     android:drawableStart="@drawable/ic_key_gray"
-                    android:hint="  Confirm Password"
+                    android:hint="  Xác nhận mật khẩu"
                     android:inputType="textPassword"
                     android:padding="10dp"
                     android:textColor="@color/black"
@@ -156,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/cPasswdTil"
                 android:layout_marginTop="20dp"
-                android:text="Register"
+                android:text="Đăng kí"
                 android:textColor="@color/white"
                 android:backgroundTint="#1E90FF"/>
         </RelativeLayout>
