@@ -15,6 +15,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import nhupham.nhuptt.bookapp.R;
 import nhupham.nhuptt.bookapp.api.ApiClient;
 import nhupham.nhuptt.bookapp.api.ApiService;
+import nhupham.nhuptt.bookapp.responses.ApiResponse;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -67,23 +68,24 @@ public class NewPasswordActivity extends AppCompatActivity {
     }
 
     private void checkTokenValidity(String token) {
-        Log.e("Da", "DAVO");
-        apiService.checkTokenValidity(token).enqueue(new Callback<ResponseBody>() {
+        apiService.checkTokenValidity(token).enqueue(new Callback<ApiResponse>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    Log.e("OK", "Dung");
-                    Toast.makeText(NewPasswordActivity.this, "Token đã hết hạn hoặc không hợp lệ!", Toast.LENGTH_SHORT).show();
-                    // Chuyển về LoginActivity
-                    startActivity(new Intent(NewPasswordActivity.this, LoginActivity.class));
-                    finish();
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse apiResponse = response.body();
+                    if (!apiResponse.isSuccess()) {
+                        // Token không hợp lệ hoặc hết hạn
+                        Toast.makeText(NewPasswordActivity.this, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(NewPasswordActivity.this, LoginActivity.class));
+                        finish();
+                    }
                 }
+                // Nếu success == true, token hợp lệ → không làm gì cả
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(NewPasswordActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
-                finish();
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+//                Toast.makeText(NewPasswordActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
             }
         });
     }

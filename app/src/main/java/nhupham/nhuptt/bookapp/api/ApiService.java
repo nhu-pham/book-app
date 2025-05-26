@@ -163,6 +163,6 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("check_reset_token.php")
-    Call<ResponseBody> checkTokenValidity(@Field("token") String token);
+    Call<ApiResponse> checkTokenValidity(@Field("token") String token);
 
 }
